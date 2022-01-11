@@ -9,7 +9,7 @@ fn main() {
     let mut prompt = powerline::Powerline::new();
 
     #[cfg(feature = "time")]
-    prompt.add_module(Time::<SimpleTheme>::with_time_format("%H:%M:%S"))?;
+    prompt.add_module(Time::<SimpleTheme>::with_time_format("%H:%M:%S"));
 
     prompt.add_module(User::<SimpleTheme>::new());
     // prompt.add_module(Host::<SimpleTheme>::new());
