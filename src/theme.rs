@@ -30,8 +30,8 @@ impl FlatCwdScheme for SimpleTheme {
 }
 
 impl ExitCodeScheme for SimpleTheme {
-    const EXIT_CODE_BG: Color = Color(161);
-    const EXIT_CODE_FG: Color = Color(15);
+    const EXIT_CODE_BG: Color = Color(0);
+    const EXIT_CODE_FG: Color = Color(161);
 }
 
 impl UserScheme for SimpleTheme {
