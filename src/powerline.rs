@@ -45,7 +45,7 @@ impl Powerline {
             let _ = write!(self.buffer, "{}", style.fg);
         }
 
-        let _ = if spaces { write!(self.buffer, " {} ", seg) } else { write!(self.buffer, "{}", seg) };
+        let _ = if spaces { write!(self.buffer, " {}", seg) } else { write!(self.buffer, "{}", seg) };
 
         self.last_style = Some(style)
     }
