@@ -23,7 +23,7 @@ impl<S: ExitCodeScheme> Module for ExitCode<S> {
     fn append_segments(&mut self, powerline: &mut Powerline) {
         if let Some(exit_code) = env::args().nth(1).as_deref() {
             if exit_code != "0" {
-                powerline.add_segment(format!("\u{2049}{}", exit_code), Style::simple(S::EXIT_CODE_FG, S::EXIT_CODE_BG))
+                powerline.add_segment(format!("{}\u{2026}\u{2049}", exit_code), Style::simple(S::EXIT_CODE_FG, S::EXIT_CODE_BG))
             }
         }
     }
