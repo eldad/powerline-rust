@@ -2,6 +2,7 @@ use crate::powerline::Powerline;
 
 mod cmd;
 mod cwd;
+mod flatcwd;
 mod exit_code;
 mod git;
 mod host;
@@ -14,6 +15,7 @@ mod time;
 
 pub use cmd::{Cmd, CmdScheme};
 pub use cwd::{Cwd, CwdScheme};
+pub use flatcwd::{FlatCwd, FlatCwdScheme};
 pub use exit_code::{ExitCode, ExitCodeScheme};
 pub use git::{Git, GitScheme};
 pub use host::{Host, HostScheme};

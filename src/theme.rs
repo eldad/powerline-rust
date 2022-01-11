@@ -20,6 +20,15 @@ impl CwdScheme for SimpleTheme {
     const SEPARATOR_FG: Color = Color(244);
 }
 
+impl FlatCwdScheme for SimpleTheme {
+    const CWD_FG: Color = Color(254);
+    const HOME_BG: Color = Color(31);
+    const HOME_FG: Color = Color(15);
+    const PATH_BG: Color = Color(237);
+    const PATH_FG: Color = Color(250);
+    const SEPARATOR_FG: Color = Color(244);
+}
+
 impl ExitCodeScheme for SimpleTheme {
     const EXIT_CODE_BG: Color = Color(161);
     const EXIT_CODE_FG: Color = Color(15);
