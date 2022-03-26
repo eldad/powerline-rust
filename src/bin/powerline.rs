@@ -21,5 +21,5 @@ fn main() {
     // prompt.add_module(VirtualEnv::<SimpleTheme>::new())?;
     prompt.add_module(ExitCode::<SimpleTheme>::new());
 
-    println!("{} ", prompt);
+    println!("{}", prompt);
 }

@@ -13,7 +13,7 @@ pub struct Style {
 
 impl Style {
     pub fn simple(fg: Color, bg: Color) -> Style {
-        Style { fg: fg.into(), bg: bg.into(), sep: '\u{E0B0}', sep_fg: bg.into() }
+        Style { fg: fg.into(), bg: bg.into(), sep: ' ', sep_fg: bg.into() }
     }
 
     pub fn special(fg: Color, bg: Color, sep: char, sep_fg: Color) -> Style {
@@ -45,7 +45,7 @@ impl Powerline {
             let _ = write!(self.buffer, "{}", style.fg);
         }
 
-        let _ = if spaces { write!(self.buffer, " {}", seg) } else { write!(self.buffer, "{}", seg) };
+        let _ = if spaces { write!(self.buffer, "{} ", seg) } else { write!(self.buffer, "{}", seg) };
 
         self.last_style = Some(style)
     }
