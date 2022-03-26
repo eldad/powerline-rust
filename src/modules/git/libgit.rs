@@ -5,7 +5,10 @@ use git2::{Branch, BranchType, ObjectType, Repository, Status, StatusOptions, St
 use super::GitStats;
 
 pub fn run_git(path: &Path) -> GitStats {
-    let repository = Repository::open(path).unwrap();
+    let repository = match Repository::open(path) {
+        Ok(v) => v,
+        Err(_) => return GitStats::default(),
+    };
 
     let mut status_options = StatusOptions::new();
     status_options
@@ -65,7 +68,7 @@ pub fn run_git(path: &Path) -> GitStats {
                     .unwrap()
                     .to_owned()
             } else {
-                String::from("Big Bang")
+                String::from("*")
             }
         });
 

@@ -47,6 +47,7 @@ impl<S: GitScheme> Git<S> {
     }
 }
 
+#[derive(Default)]
 pub struct GitStats {
     pub untracked: u32,
     pub conflicted: u32,
@@ -64,7 +65,11 @@ impl GitStats {
 }
 
 fn find_git_dir() -> Option<PathBuf> {
-    let mut git_dir = env::current_dir().unwrap();
+    let mut git_dir = match env::current_dir() {
+        Err(_) => return None,
+        Ok(v) => v,
+    };
+
     loop {
         git_dir.push(".git/");
 
