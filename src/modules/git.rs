@@ -2,6 +2,7 @@ use std::cmp::Ordering;
 use std::env;
 use std::marker::PhantomData;
 use std::path::PathBuf;
+use std::time::Duration;
 
 use super::Module;
 use crate::{Color, Powerline, Style};
@@ -39,6 +40,8 @@ pub trait GitScheme {
     const GIT_REPO_CLEAN_FG: Color;
     const GIT_REPO_DIRTY_BG: Color;
     const GIT_REPO_DIRTY_FG: Color;
+    const GIT_FETCH_AGE_BG: Color;
+    const GIT_FETCH_AGE_FG: Color;
 }
 
 impl<S: GitScheme> Git<S> {
@@ -56,6 +59,7 @@ pub struct GitStats {
     pub behind: u32,
     pub staged: u32,
     pub branch_name: String,
+    pub fetch_head_age: Option<Duration>,
 }
 
 impl GitStats {
@@ -114,5 +118,11 @@ impl<S: GitScheme> Module for Git<S> {
         add_elem(stats.non_staged, '\u{270E}', S::GIT_NOTSTAGED_FG, S::GIT_NOTSTAGED_BG);
         add_elem(stats.untracked, '\u{2753}', S::GIT_UNTRACKED_FG, S::GIT_UNTRACKED_BG);
         add_elem(stats.conflicted, '\u{273C}', S::GIT_CONFLICTED_FG, S::GIT_CONFLICTED_BG);
+
+        if let Some(fetch_head_age) = stats.fetch_head_age {
+            if fetch_head_age.as_secs() > 3600 {
+                add_elem((fetch_head_age.as_secs() % 0xffffffff_u64) as u32, '\u{273C}', S::GIT_FETCH_AGE_FG, S::GIT_FETCH_AGE_BG);
+            }
+        }
     }
 }
