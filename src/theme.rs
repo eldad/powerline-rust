@@ -34,6 +34,11 @@ impl ExitCodeScheme for SimpleTheme {
     const EXIT_CODE_FG: Color = Color(160);
 }
 
+impl KeyEnvScheme for SimpleTheme {
+    const KEY_ENV_BG: Color = Color(0);
+    const KEY_ENV_FG: Color = Color(160);
+}
+
 impl UserScheme for SimpleTheme {
     const USERNAME_BG: Color = Color(240);
     const USERNAME_FG: Color = Color(250);

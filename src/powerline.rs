@@ -21,16 +21,13 @@ impl Style {
     }
 }
 
+#[derive(Default)]
 pub struct Powerline {
     buffer: String,
     last_style: Option<Style>,
 }
 
 impl Powerline {
-    pub fn new() -> Powerline {
-        Powerline { buffer: String::with_capacity(512), last_style: None }
-    }
-
     #[inline(always)]
     fn write_segment<D: Display>(&mut self, seg: D, style: Style, spaces: bool) {
         // write!(f, "{}{}{}{}{}{}", seg.fg, seg.bg, seg.val, next.bg, seg.sep_col, seg.sep)?;

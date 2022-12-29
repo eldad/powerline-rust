@@ -95,9 +95,9 @@ fn duration_string(duration: &Duration) -> String {
     let mut hours = minutes / 60;
     let mut days = hours / 24;
     let weeks = days / 7;
-    days = days % 7;
-    hours = hours % 24;
-    minutes = minutes % 60;
+    days %= 7;
+    hours %= 24;
+    minutes %= 60;
 
     let mut timestr = String::new();
 

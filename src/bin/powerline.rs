@@ -6,7 +6,7 @@ use powerline::modules::*;
 use powerline::theme::SimpleTheme;
 
 fn main() {
-    let mut prompt = powerline::Powerline::new();
+    let mut prompt = powerline::Powerline::default();
 
     #[cfg(feature = "time")]
     prompt.add_module(Time::<SimpleTheme>::with_time_format("%H:%M:%S"));
@@ -20,6 +20,7 @@ fn main() {
     prompt.add_module(Cmd::<SimpleTheme>::new());
     // prompt.add_module(VirtualEnv::<SimpleTheme>::new())?;
     prompt.add_module(ExitCode::<SimpleTheme>::new());
+    prompt.add_module(KeyEnv::<SimpleTheme>::new());
 
     println!("{}", prompt);
 }
