@@ -6,7 +6,7 @@ use powerline::modules::*;
 use powerline::theme::SimpleTheme;
 
 fn main() {
-    let mut prompt = powerline::Powerline::new();
+    let mut prompt = powerline::Powerline::default();
 
     #[cfg(feature = "time")]
     prompt.add_module(Time::<SimpleTheme>::with_time_format("%H:%M:%S"));
