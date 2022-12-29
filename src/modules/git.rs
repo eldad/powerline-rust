@@ -2,6 +2,7 @@ use std::cmp::Ordering;
 use std::env;
 use std::marker::PhantomData;
 use std::path::PathBuf;
+use std::time::Duration;
 
 use super::Module;
 use crate::{Color, Powerline, Style};
@@ -39,6 +40,9 @@ pub trait GitScheme {
     const GIT_REPO_CLEAN_FG: Color;
     const GIT_REPO_DIRTY_BG: Color;
     const GIT_REPO_DIRTY_FG: Color;
+    const GIT_FETCH_AGE_BG: Color;
+    const GIT_FETCH_AGE_FG: Color;
+    const GIT_FETCH_AGE_STALE_FG: Color;
 }
 
 impl<S: GitScheme> Git<S> {
@@ -56,6 +60,7 @@ pub struct GitStats {
     pub behind: u32,
     pub staged: u32,
     pub branch_name: String,
+    pub fetch_head_age: Option<Duration>,
 }
 
 impl GitStats {
@@ -83,6 +88,33 @@ fn find_git_dir() -> Option<PathBuf> {
             return None;
         }
     }
+}
+
+fn duration_string(duration: &Duration) -> String {
+    let mut minutes = duration.as_secs() / 60;
+    let mut hours = minutes / 60;
+    let mut days = hours / 24;
+    let weeks = days / 7;
+    days = days % 7;
+    hours = hours % 24;
+    minutes = minutes % 60;
+
+    let mut timestr = String::new();
+
+    if weeks > 0 {
+        timestr += &format!("{}w", weeks);
+    }
+    if weeks > 0 || days > 0 {
+        timestr += &format!("{}d", days);
+    }
+    if weeks > 0 || days > 0 || hours > 0 {
+        timestr += &format!("{}h", hours);
+    }
+    if weeks > 0 || days > 0 || hours > 0 || minutes > 0{
+        timestr += &format!("{}m", minutes);
+    }
+
+    timestr
 }
 
 impl<S: GitScheme> Module for Git<S> {
@@ -114,5 +146,20 @@ impl<S: GitScheme> Module for Git<S> {
         add_elem(stats.non_staged, '\u{270E}', S::GIT_NOTSTAGED_FG, S::GIT_NOTSTAGED_BG);
         add_elem(stats.untracked, '\u{2753}', S::GIT_UNTRACKED_FG, S::GIT_UNTRACKED_BG);
         add_elem(stats.conflicted, '\u{273C}', S::GIT_CONFLICTED_FG, S::GIT_CONFLICTED_BG);
+
+        if let Some(fetch_head_age) = stats.fetch_head_age {
+
+            if fetch_head_age.as_secs() > 3600 {
+                let symbol = '\u{23F0}';
+
+                let fg = if fetch_head_age.as_secs() > 12 * 3600 {
+                    S::GIT_FETCH_AGE_FG
+                } else {
+                    S::GIT_FETCH_AGE_STALE_FG
+                };
+
+                powerline.add_segment(format!("{}{}", duration_string(&fetch_head_age), symbol), Style::simple(fg, S::GIT_FETCH_AGE_BG));
+            }
+        }
     }
 }

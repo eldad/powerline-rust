@@ -1,8 +1,17 @@
 use std::path::Path;
+use std::time::Duration;
 
 use git2::{Branch, BranchType, ObjectType, Repository, Status, StatusOptions, StatusShow};
 
 use super::GitStats;
+
+pub fn try_get_fetch_head_age(repository: &Repository) -> anyhow::Result<Duration> {
+    let fetch_head_path = repository.path().join("FETCH_HEAD");
+    let head_path = repository.path().join("HEAD");
+    let fetch_head_age =
+        std::fs::metadata(fetch_head_path).or_else(|_| std::fs::metadata(head_path))?.modified()?.elapsed()?;
+    Ok(fetch_head_age)
+}
 
 pub fn run_git(path: &Path) -> GitStats {
     let repository = match Repository::open(path) {
@@ -72,5 +81,7 @@ pub fn run_git(path: &Path) -> GitStats {
             }
         });
 
-    GitStats { untracked, staged, non_staged, ahead, behind, conflicted, branch_name }
+    let fetch_head_age = try_get_fetch_head_age(&repository).ok();
+
+    GitStats { untracked, staged, non_staged, ahead, behind, conflicted, branch_name, fetch_head_age }
 }

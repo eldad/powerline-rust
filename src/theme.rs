@@ -73,6 +73,9 @@ impl GitScheme for SimpleTheme {
     const GIT_STAGED_FG: Color = Color(15);
     const GIT_UNTRACKED_BG: Color = Color(52);
     const GIT_UNTRACKED_FG: Color = Color(15);
+    const GIT_FETCH_AGE_BG: Color = Color(52);
+    const GIT_FETCH_AGE_FG: Color = Color(15);
+    const GIT_FETCH_AGE_STALE_FG: Color = Color(9);
 }
 
 impl VirtualEnvScheme for SimpleTheme {
