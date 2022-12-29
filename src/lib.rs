@@ -1,3 +1,5 @@
+#[allow(clippy::new_without_default)]
+
 pub mod modules;
 pub mod powerline;
 pub mod terminal;
