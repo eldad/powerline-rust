@@ -20,6 +20,7 @@ fn main() {
     prompt.add_module(Cmd::<SimpleTheme>::new());
     // prompt.add_module(VirtualEnv::<SimpleTheme>::new())?;
     prompt.add_module(ExitCode::<SimpleTheme>::new());
+    prompt.add_module(KeyEnv::<SimpleTheme>::new());
 
     println!("{}", prompt);
 }

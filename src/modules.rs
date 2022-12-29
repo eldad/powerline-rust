@@ -9,6 +9,7 @@ mod host;
 mod readonly;
 mod user;
 mod venv;
+mod keyenv;
 
 #[cfg(feature = "time")]
 mod time;
@@ -24,6 +25,7 @@ pub use readonly::{ReadOnly, ReadOnlyScheme};
 pub use time::{Time, TimeScheme};
 pub use user::{User, UserScheme};
 pub use venv::{VirtualEnv, VirtualEnvScheme};
+pub use keyenv::{KeyEnv, KeyEnvScheme};
 
 pub trait Module {
     fn append_segments(&mut self, powerline: &mut Powerline);
