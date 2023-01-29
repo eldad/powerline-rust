@@ -124,7 +124,10 @@ impl<S: GitScheme> Module for Git<S> {
             _ => return,
         };
 
-        let stats = internal::run_git(&git_dir);
+        let stats = match internal::run_git(&git_dir) {
+            Ok(stats) => stats,
+            _ => return,
+        };
 
         let (branch_fg, branch_bg) = if stats.is_dirty() {
             (S::GIT_REPO_DIRTY_FG, S::GIT_REPO_DIRTY_BG)
@@ -136,7 +139,7 @@ impl<S: GitScheme> Module for Git<S> {
 
         let mut add_elem = |count: u32, symbol, fg, bg| match count.cmp(&1) {
             Ordering::Equal => powerline.add_segment(symbol, Style::simple(fg, bg)),
-            Ordering::Greater => powerline.add_segment(format!("{}{}", count, symbol), Style::simple(fg, bg)),
+            Ordering::Greater => powerline.add_segment(format!("{count}{symbol}"), Style::simple(fg, bg)),
             Ordering::Less => (),
         };
 
