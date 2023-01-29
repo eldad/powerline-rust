@@ -12,12 +12,8 @@ pub fn try_get_fetch_head_age(repository: &Repository) -> anyhow::Result<Duratio
         std::fs::metadata(fetch_head_path).or_else(|_| std::fs::metadata(head_path))?.modified()?.elapsed()?;
     Ok(fetch_head_age)
 }
-
-pub fn run_git(path: &Path) -> GitStats {
-    let repository = match Repository::open(path) {
-        Ok(v) => v,
-        Err(_) => return GitStats::default(),
-    };
+pub fn run_git(path: &Path) -> anyhow::Result<GitStats> {
+    let repository = Repository::open(path)?;
 
     let mut status_options = StatusOptions::new();
     status_options
@@ -28,7 +24,7 @@ pub fn run_git(path: &Path) -> GitStats {
 
     let (mut untracked, mut non_staged, mut conflicted, mut staged, mut ahead, mut behind) = (0, 0, 0, 0, 0, 0);
 
-    for status in repository.statuses(Some(&mut status_options)).unwrap().iter().map(|ref x| x.status()) {
+    for status in repository.statuses(Some(&mut status_options))?.iter().map(|ref x| x.status()) {
         if status.intersects(
             Status::INDEX_NEW
                 | Status::INDEX_MODIFIED
@@ -50,14 +46,14 @@ pub fn run_git(path: &Path) -> GitStats {
     }
 
     let active_branch: Option<Branch> =
-        repository.branches(Some(BranchType::Local)).unwrap().filter_map(Result::ok).map(|x| x.0).find(|b| b.is_head());
+        repository.branches(Some(BranchType::Local))?.filter_map(Result::ok).map(|x| x.0).find(|b| b.is_head());
 
     if let Some(ref active_branch) = active_branch {
         let local = active_branch.get().target();
         let upstream = active_branch.upstream().ok().and_then(|obj| obj.get().target());
 
         if let (Some(local), Some(upstream)) = (local, upstream) {
-            let (a, b) = repository.graph_ahead_behind(local, upstream).unwrap();
+            let (a, b) = repository.graph_ahead_behind(local, upstream)?;
             ahead = a as u32;
             behind = b as u32;
         };
@@ -83,5 +79,5 @@ pub fn run_git(path: &Path) -> GitStats {
 
     let fetch_head_age = try_get_fetch_head_age(&repository).ok();
 
-    GitStats { untracked, staged, non_staged, ahead, behind, conflicted, branch_name, fetch_head_age }
+    Ok(GitStats { untracked, staged, non_staged, ahead, behind, conflicted, branch_name, fetch_head_age })
 }
