@@ -7,12 +7,6 @@ use std::time::Duration;
 use super::Module;
 use crate::{Color, Powerline, Style};
 
-#[cfg(not(feature = "libgit"))]
-mod process;
-
-#[cfg(not(feature = "libgit"))]
-use process as internal;
-
 #[cfg(feature = "libgit")]
 mod libgit;
 
