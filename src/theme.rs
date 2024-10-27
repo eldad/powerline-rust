@@ -87,3 +87,8 @@ impl VirtualEnvScheme for SimpleTheme {
     const PYVENV_BG: Color = Color(42);
     const PYVENV_FG: Color = Color(0);
 }
+
+impl DistroboxScheme for SimpleTheme {
+    const DISTROBOX_BG: Color = Color(42);
+    const DISTROBOX_FG: Color = Color(0);
+}
